@@ -47,7 +47,7 @@ namespace Http2 {
 		nghttp2_session *session = nullptr;
 		return session;
 	}
-	nghttp2_sesison_callbacks *SetupCallback() {
+	nghttp2_session_callbacks *SetupCallback() {
 		nghttp2_session_callbacks *callbacks;
 		nghttp2_session_callbacks_new(&callbacks);
 		nghttp2_session_callbacks_set_send_callback(callbacks, send_callback);
