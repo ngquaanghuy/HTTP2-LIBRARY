@@ -7,8 +7,28 @@
 #include <unistd.h>
 #include <string>
 #include <http2/http2.h>
+#include <stdexcept>
+struct TlsConfig {
+	std::string ip;
+	int port;
+	std::string version;
+};
 namespace TLS {
-	void initialize(std::string version) {
+	void initialize_config (const TlsConfig &cfg) {
+		SSL_load_error_strings();
+		OpenSSl_add_ssl_algorithms();
+		const SSL_METHOD *method = TLS_client_method();
+		SSL_CTX *ctx = SSL_CTX_new(method);
+		if (!ctx) {
+			throw std::runtime_error("Unable to create SSL context");
+		}
+		// set config version
+		if (cfg.version == "TLSV1_2") {
+			SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+			SSL_CTX_set_max_proto_version(ctx, TLS1_2_VERSION);	
+		}
+	}
+	void initialize_normal(std::string version) {
 		//if (!version) {
 		//	HTTP2_ERROR("Tls handshake setup failed");
 		//	return;

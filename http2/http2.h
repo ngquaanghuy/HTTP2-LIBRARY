@@ -16,5 +16,6 @@ namespace Session {
 }
 
 namespace TLS {
-	void initialize(std::string version);
+	void initialize_normal(std::string version);
+	void initialize_config();
 }
