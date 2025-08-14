@@ -6,7 +6,7 @@ struct Connection {
 	int fd;
 	SSL *ssl;
 };
-
+#define HTTP2_ERROR(msg) std::cerr << __FILE__ << " : " << __LINE__ << " | " << __func__ << " -> error: " << msg << "\n";
 static ssize_t send_callback(nghttp2_session *session, const uint8_t *data, size_t length, int, void *user_data) {
 	Connection *conn = (Connection*)user_data;
 	int ret = SSL_write(conn->ssl, data, length);
@@ -45,6 +45,14 @@ static int on_data_chunk_recv_callback(nghttp2_session *session, uint8_t flags, 
 namespace Http2 {
 	nghttp2_session *Session() {
 		nghttp2_session *session = nullptr;
+		nghttp2_session_callbacks *callbacks;
+		nghttp2_session_callbacks_new(&callbacks);
+		int ret = nghttp2_session_client_new(&session, callbacks, nullptr);
+		nghttp2_session_callbacks_del(callbacks);
+		if (ret != 0) {
+			HTTP2_ERROR("Session initialization failed!");
+			return nullptr;
+		}
 		return session;
 	}
 	nghttp2_session_callbacks *SetupCallback() {
