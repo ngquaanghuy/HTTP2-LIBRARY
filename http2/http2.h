@@ -4,7 +4,11 @@
 #include <string>
 #include <nghttp2/nghttp2.h>
 #include <openssl/ssl.h>
-
+#include <unistd.h>
+#include <cstring>
+#include <cstdint>
+#include <cstddef>
+#define HTTP2_FLAG_FRAME NGHTTP2_FLAG_NONE
 struct TlsConfig {
 	std::string host;
 	int port;
@@ -12,6 +16,9 @@ struct TlsConfig {
 	int timeout_ms;
 };
 namespace Http2 {
+	void setFrame_easy(nghttp2_session *session);
+	void setFrame_easy(...) = delete;
+	void setFrame_hard(nghttp2_session *session, uint8_t flags, const nghttp2_settings_entry *iv, size_t niv);
 	nghttp2_session *Session();
 	nghttp2_session_callbacks *SetupCallback();
 }

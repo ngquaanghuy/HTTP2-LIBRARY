@@ -12,6 +12,7 @@ namespace Session {
 			return;
 		}		
 		nghttp2_session_del(session);
+		session = nullptr;
 	}
 	void clean_callback(nghttp2_session_callbacks *callbacks) {
 		if (!callbacks) {
@@ -19,5 +20,6 @@ namespace Session {
 			return;
 		}
 		nghttp2_session_callbacks_del(callbacks);
+		callbacks = nullptr;
 	}
 }

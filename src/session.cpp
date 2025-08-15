@@ -1,7 +1,9 @@
 #include <nghttp2/nghttp2.h>
 #include <iostream>
 #include <openssl/ssl.h>
-
+#include <cstdint>
+#include <cstddef>
+#define HTTP2_FLAG_FRAME NGHTTP2_FLAG_NONE
 struct Connection {
 	int fd;
 	SSL *ssl;
@@ -54,6 +56,30 @@ namespace Http2 {
 			return nullptr;
 		}
 		return session;
+	}
+	void setFrame_easy(nghttp2_session *session) {
+		if (!session) {
+			HTTP2_ERROR("Session does not exist");
+			return;
+		}
+		nghttp2_submit_settings(session, NGHTTP2_FLAG_NONE, nullptr, 0);
+	}
+	void setFrame_hard(nghttp2_session *session, uint8_t flags, const nghttp2_settings_entry *iv, size_t niv) {
+		if (!session) {
+			HTTP2_ERROR("Session not passed in");
+			return;
+		}
+		flags = HTTP2_FLAG_FRAME;
+//		if (!flags) {
+//			HTTP2_ERROR("Flag of the current version does not exist");
+//			return;
+//		}
+		if ((flags != NGHTTP2_FLAG_NONE) && (flags != HTTP2_FLAG_FRAME)) {
+			HTTP2_ERROR("Only HTTP2_FLAG_FRAME - NGHTTP2_FLAG_NONE should be applied");
+			return;
+		}
+		flags = HTTP2_FLAG_FRAME;
+		nghttp2_submit_settings(session, flags, iv, niv);
 	}
 	nghttp2_session_callbacks *SetupCallback() {
 		nghttp2_session_callbacks *callbacks;

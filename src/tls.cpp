@@ -107,12 +107,7 @@ namespace TLS {
 		}
 		*/
 	}
-	void initialize_normal(std::string version = "abcd") {
-		if (version == "abcd") {
-			SSL_CTX *ctx = SSL_CTX_new(TLS_client_method());
-			SSL_CTX_set_min_proto_version(ctx, TLS1_3_VERSION);
-			SSL_CTX_set_max_proto_version(ctx, TLS1_3_VERSION);
-		}
+	void initialize_normal(std::string version = "TLSV1_3") {
 		addrinfo hints{}, *res;
 		hints.ai_family = AF_UNSPEC;
 		hints.ai_socktype = SOCK_STREAM;
