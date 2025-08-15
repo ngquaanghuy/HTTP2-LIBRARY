@@ -3,6 +3,14 @@
 #include <vector>
 #include <string>
 #include <nghttp2/nghttp2.h>
+#include <openssl/ssl.h>
+
+struct TlsConfig {
+	std::string host;
+	int port;
+	std::string version = "TLSV1_3";
+	int timeout_ms;
+};
 namespace Http2 {
 	nghttp2_session *Session();
 	nghttp2_session_callbacks *SetupCallback();
@@ -17,5 +25,6 @@ namespace Session {
 
 namespace TLS {
 	void initialize_normal(std::string version);
-	void initialize_config();
+	SSL* initialize_config(const TlsConfig &cfg);
+	
 }

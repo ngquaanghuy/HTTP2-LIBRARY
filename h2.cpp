@@ -6,7 +6,7 @@ int main() {
 	std::cout << session << "\n";
 	Session::clean_session(session);
 	Session::clean_callback(callback);
-	std::cout << TLS::initialize("TLSV1_1") << "\n";
+	TLS::initialize_normal("TLSV1_1");
 	if (session == nullptr) {
 		std::cout << "Remove session sucessfully\n";
 	} else {
