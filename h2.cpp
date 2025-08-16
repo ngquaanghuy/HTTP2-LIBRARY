@@ -3,6 +3,10 @@
 int main() {
 	auto session = Http2::Session();
 	auto callback = Http2::SetupCallback();
+	auto callback_new = Callbacks::init_callbacks();
+	auto callbacks_auto = Callbacks::init_cbs_auto();
+	Callbacks::init_cbs_new(&callback_new);
+	Callbacks::init_send(&callback_new);
 	std::cout << session << "\n";
 	//Session::clean_session(session);
 	Session::clean_callback(callback);

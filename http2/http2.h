@@ -29,7 +29,13 @@ namespace Session {
 	void clean_callback(nghttp2_session_callbacks *callbacks);
 	void clean_callback(...) = delete;
 }
-
+namespace Callbacks {
+	nghttp2_session_callbacks *init_callbacks();
+	nghttp2_session_callbacks *init_cbs_auto();
+	int init_cbs_new(nghttp2_session_callbacks **callbacks);
+	int init_send(nghttp2_session_callbacks **callbacks);
+	int init_send_handmade(nghttp2_session_callbacks **callbacks, nghttp2_send_callback send_cb);
+}
 namespace TLS {
 	void initialize_normal(std::string version);
 	SSL* initialize_config(const TlsConfig &cfg);
