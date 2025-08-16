@@ -35,6 +35,8 @@ namespace Callbacks {
 	int init_cbs_new(nghttp2_session_callbacks **callbacks);
 	int init_send(nghttp2_session_callbacks **callbacks);
 	int init_send_handmade(nghttp2_session_callbacks **callbacks, nghttp2_send_callback send_cb);
+	int init_recv(nghttp2_session_callbacks **callbacks);
+	int init_recv_handmade(nghttp2_session_callbacks **callbacks, nghttp2_recv_callback recv_cb);
 }
 namespace TLS {
 	void initialize_normal(std::string version);

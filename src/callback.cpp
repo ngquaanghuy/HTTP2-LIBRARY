@@ -21,7 +21,7 @@ static ssize_t send_callback(nghttp2_session *session, const uint8_t *data, size
 	}
 	return ret;
 }
-static ssize_t recv_callback(nghttp2_session *session, uint8_t *buf, ssize_t length, int, void *user_data) {
+static ssize_t recv_callback(nghttp2_session *session, uint8_t *buf, size_t length, int, void *user_data) {
 	Connection *conn = (Connection*)user_data;
 	int ret = SSL_read(conn->ssl, buf, length);
 	if (ret <= 0) {
@@ -75,6 +75,22 @@ namespace Callbacks {
 			return 1;
 		}
 		nghttp2_session_callbacks_set_send_callback(*callbacks, send_cb);
+		return 0;
+	}
+	int init_recv(nghttp2_session_callbacks **callbacks) {
+		if (!callbacks) {
+			HTTP2_ERROR("The data passed in is not callbacks.");
+			return 1;
+		}
+		nghttp2_session_callbacks_set_recv_callback(*callbacks, recv_callback);
+		return 0;
+	}
+	int init_recv_handmade(nghttp2_session_callbacks **callbacks, nghttp2_recv_callback recv_cb) {
+		if (!callbacks || !*callbacks) {
+			HTTP2_ERROR("Inappropriate callbacks");
+			return 1;
+		}
+		nghttp2_session_callbacks_set_recv_callback(*callbacks, recv_cb);
 		return 0;
 	}
 }
